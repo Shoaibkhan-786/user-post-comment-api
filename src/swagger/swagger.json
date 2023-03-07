@@ -1,0 +1,1032 @@
+{
+  "openapi": "3.0.0.",
+  "info": {
+    "title": "User-Post-Comment API with different Crud Operations.",
+    "description": "With the help of different API, a user can fetch, update, delete and do many more.",
+    "version": "1.0.0",
+    "contact": {
+      "name": "SHOAIB KHAN",
+      "email": "skshoaib1399@gmail.com",
+      "url": "https://accounts.google.com/signin"
+    }
+  },
+  "tags": [
+    {
+      "name": "User",
+      "description": "All Crud Operations related to User.",
+      "externalDocs": {
+        "description": "find more about crud operations",
+        "url": "https://www.mongodb.com/docs/drivers/node/current/fundamentals/crud/"
+      }
+    },
+    {
+      "name": "Post",
+      "description": "fetch, update & delete User Post.",
+      "externalDocs": {
+        "description": "find more about crud operations",
+        "url": "https://www.mongodb.com/docs/drivers/node/current/fundamentals/crud/"
+      }
+    },
+    {
+      "name": "Comment",
+      "description": "Any User can comment on the post.",
+      "externalDocs": {
+        "description": "find more about crud operations",
+        "url": "https://www.mongodb.com/docs/drivers/node/current/fundamentals/crud/"
+      }
+    }
+  ],
+
+  "components": {
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    }
+  },
+  "security": [
+    {
+      "BearerAuth": []
+    }
+  ],
+
+  "paths": {
+    "/users": {
+      "post": {
+        "security": [],
+        "tags": ["User"],
+        "summary": "To register new User.",
+        "description": "This api is used for creating a new user.",
+        "requestBody": {
+          "description": "Register yourself according to the schema.",
+          "required": "true",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/definitions/schema/userRegister"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User created Successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/schema/userRegister"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "please enter correct inputs."
+          }
+        }
+      },
+      "get": {
+        "tags": ["User"],
+        "summary": "To get All User.",
+        "description": "This api is used for fetching all the users.",
+        "responses": {
+          "200": {
+            "description": "users fetched successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/schema/users"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized."
+          }
+        }
+      }
+    },
+    "/users/{userid}": {
+      "get": {
+        "tags": ["User"],
+        "summary": "To get User by ID.",
+        "description": "This api is used for fetching a particular user.",
+        "parameters": [
+          {
+            "name": "userid",
+            "description": "Insert Id of the User",
+            "required": "true",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "user fetch successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/schema/users"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized."
+          },
+          "404": {
+            "description": "Not Found."
+          }
+        }
+      },
+      "put": {
+        "tags": ["User"],
+        "summary": "To update User by ID.",
+        "description": "This api is used for updating data of a particular user.",
+        "parameters": [
+          {
+            "name": "userid",
+            "description": "Insert Id of the User",
+            "required": "true",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Update yourself according to the schema.",
+          "required": "true",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/definitions/schema/userUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "user updated successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/schema/userUpdate"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized."
+          },
+          "404": {
+            "description": "Not Found."
+          }
+        }
+      },
+      "delete": {
+        "tags": ["User"],
+        "summary": "To delete User by ID.",
+        "description": "This api is used for delete a particular user.",
+        "parameters": [
+          {
+            "name": "userid",
+            "description": "Insert Id of the User",
+            "required": "true",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "user delete successfully."
+          },
+          "401": {
+            "description": "Unauthorized."
+          },
+          "404": {
+            "description": "Not Found."
+          }
+        }
+      }
+    },
+    "/users/login": {
+      "post": {
+        "security" :[],
+        "tags": ["User"],
+        "summary": "For login in Account.",
+        "description": "This api is used for login to the account.",
+        "requestBody": {
+          "description": "Login  yourself with email and password.",
+          "required": "true",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/definitions/schema/userLogin"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User LoggedIn Successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/schema/userLogin"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User Not Found. Plz register First."
+          }
+        }
+      }
+    },
+    "/users/{userid}/posts": {
+      "post": {
+        "tags": ["Post"],
+        "summary": "To create new Post.",
+        "description": "This api is used for creating new Post.",
+        "parameters": [
+          {
+            "name": "userid",
+            "description": "Insert Id of the User",
+            "required": "true",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Create New Post.",
+          "required": "true",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/definitions/schema/post"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Post Created Successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/schema/post"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized."
+          }
+        }
+      },
+      "get": {
+        "tags": ["Post"],
+        "summary": "To get all Post of the user.",
+        "description": "This api is used for fetching all the Post of the User.",
+        "parameters": [
+          {
+            "name": "userid",
+            "description": "Insert Id of the User",
+            "required": "true",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Posts fetched Successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/schema/post"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized."
+          }
+        }
+      }
+    },
+    "/users/{userid}/posts/{postid}": {
+      "get": {
+        "tags": ["Post"],
+        "summary": "To get particular Post of user.",
+        "description": "This api is used for fetching particular Post of the User.",
+        "parameters": [
+          {
+            "name": "userid",
+            "description": "Insert Id of the User",
+            "required": "true",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "postid",
+            "description": "Insert PostId",
+            "required": "true",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Post fetched Successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/schema/post"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized."
+          },
+          "404": {
+            "description": "post not found."
+          }
+        }
+      },
+      "put": {
+        "tags": ["Post"],
+        "summary": "To update Post of user.",
+        "description": "This api is used for updating Post of the User.",
+        "parameters": [
+          {
+            "name": "userid",
+            "description": "Insert Id of the User",
+            "required": "true",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "postid",
+            "description": "Insert PostId",
+            "required": "true",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "update Post.",
+          "required": "true",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/definitions/schema/post"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Post updated Successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/schema/post"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized."
+          },
+          "404": {
+            "description": "post not found."
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Post"],
+        "summary": "To delete Post of user.",
+        "description": "This api is used for deleting Post of the User.",
+        "parameters": [
+          {
+            "name": "userid",
+            "description": "Insert Id of the User",
+            "required": "true",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "postid",
+            "description": "Insert PostId",
+            "required": "true",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Post deleted Successfully."
+          },
+          "401": {
+            "description": "Unauthorized."
+          },
+          "404": {
+            "description": "post not found."
+          }
+        }
+      }
+    },
+    "/users/{userid}/posts/{postid}/postlikes": {
+      "get": {
+        "security": [],
+        "tags": ["Post"],
+        "summary": "To get count of likes of particular Post .",
+        "description": "This api is used for get count of likes of particular Post of the User.",
+        "parameters": [
+          {
+            "name": "userid",
+            "description": "Insert Id of the User",
+            "required": "true",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "postid",
+            "description": "Insert PostId",
+            "required": "true",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "count of likes fetched Successfully."
+          },
+          "401": {
+            "description": "Unauthorized."
+          },
+          "404": {
+            "description": "post not found."
+          }
+        }
+      }
+    },
+    "/users/{userid}/posts/{postid}/likes": {
+      "post": {
+        "security": [],
+        "tags": ["Post"],
+        "summary": "For like a post.",
+        "description": "This api is used for like a user's post.",
+        "parameters": [
+          {
+            "name": "userid",
+            "description": "Insert Id of the User",
+            "required": "true",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "postid",
+            "description": "Insert PostId",
+            "required": "true",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "You like a new post."
+          },
+          "401": {
+            "description": "Unauthorized."
+          },
+          "404": {
+            "description": "post not found."
+          }
+        }
+      }
+    },
+    "/users/{userid}/posts/{postid}/dislikes": {
+      "post": {
+        "security": [],
+        "tags": ["Post"],
+        "summary": "For dislike a post.",
+        "description": "This api is used for dislike a user's post.",
+        "parameters": [
+          {
+            "name": "userid",
+            "description": "Insert Id of the User",
+            "required": "true",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "postid",
+            "description": "Insert PostId",
+            "required": "true",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Dislike."
+          },
+          "401": {
+            "description": "Unauthorized."
+          },
+          "403": {
+            "description": "you can't dislike this post."
+          }
+        }
+      }
+    },
+    "/users/{userid}/posts/{postid}/comments": {
+      "post": {
+        "tags": ["Comment"],
+        "summary": "For comment on a post.",
+        "description": "This api is used for comment on  a user's post.",
+        "parameters": [
+          {
+            "name": "userid",
+            "description": "Insert Id of the User",
+            "required": "true",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "postid",
+            "description": "Insert PostId",
+            "required": "true",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Comment.",
+          "required": "true",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/definitions/schema/comment"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "you successfully commented on this post.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/schema/comment"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized."
+          }
+        }
+      },
+      "get": {
+        "tags": ["Comment"],
+        "summary": "To get all comment of a post.",
+        "description": "This api is used for fetching all comments of a post.",
+        "parameters": [
+          {
+            "name": "userid",
+            "description": "Insert Id of the User",
+            "required": "true",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "postid",
+            "description": "Insert PostId",
+            "required": "true",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Comments fetched successfully."
+          },
+          "401": {
+            "description": "Unauthorized."
+          },
+          "404": {
+            "description": "Comment Not Found."
+          }
+        }
+      }
+    },
+    "/users/{userid}/posts/{postid}/comments/{commentid}": {
+      "get": {
+        "tags": ["Comment"],
+        "summary": "To get particular comment of a post.",
+        "description": "This api is used for fetching particular comment of a post.",
+        "parameters": [
+          {
+            "name": "userid",
+            "description": "Insert Id of the User",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "postid",
+            "description": "Insert postid.",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "commentid",
+            "description": "Insert commentid",
+            "required": "true",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Comment fetched successfully."
+          },
+          "401": {
+            "description": "Unauthorized."
+          },
+          "404": {
+            "description": "Comment Not Found."
+          }
+        }
+      },
+      "put": {
+        "tags": ["Comment"],
+        "summary": "To update Comment of user's Post.",
+        "description": "This api is used for updating comment of the post.",
+        "parameters": [
+          {
+            "name": "userid",
+            "description": "Insert Id of the User",
+            "required": "true",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "postid",
+            "description": "Insert PostId",
+            "required": "true",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "commentid",
+            "description": "Insert commentid",
+            "required": "true",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "update Comment.",
+          "required": "true",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/definitions/schema/comment"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Comment updated Successfully."
+          },
+          "401": {
+            "description": "Unauthorized."
+          },
+          "404": {
+            "description": "Comment not found."
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Comment"],
+        "summary": "To delete comment.",
+        "description": "This api is used for deleting comment of the Post.",
+        "parameters": [
+          {
+            "name": "userid",
+            "description": "Insert Id of the User",
+            "required": "true",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "postid",
+            "description": "Insert PostId",
+            "required": "true",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "commentid",
+            "description": "Insert commentid",
+            "required": "true",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Comment Deleted Successfully."
+          },
+          "401": {
+            "description": "Unauthorized."
+          },
+          "404": {
+            "description": "comment not found."
+          }
+        }
+      }
+    },
+    "/users/{userid}/posts/{postid}/comments/{commentid}/likes": {
+      "post": {
+        "security": [],
+        "tags": ["Comment"],
+        "summary": "For like comment.",
+        "description": "This api is used for like comment.",
+        "parameters": [
+          {
+            "name": "userid",
+            "description": "Insert Id of the User",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "postid",
+            "description": "Insert PostId",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "commentid",
+            "description": "Insert commentid",
+            "required": "true",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "comment liked."            
+          },
+          "401": {
+            "description": "Unauthorized."
+          }
+        }
+      }
+    },
+    "/users/{userid}/posts/{postid}/comments/{commentid}/dislikes": {
+      "post": {
+        "security": [],
+        "tags": ["Comment"],
+        "summary": "For dislike comment.",
+        "description": "This api is used for dislike comment.",
+        "parameters": [
+          {
+            "name": "userid",
+            "description": "Insert Id of the User",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "postid",
+            "description": "Insert PostId",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "commentid",
+            "description": "Insert commentid",
+            "required": "true",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "comment disliked."         
+          },
+          "401": {
+            "description": "Unauthorized."
+          }
+        }
+      }
+    },
+    "/users/{userid}/posts/{postid}/comments/{commentid}/commentlikes": {
+      "get": {
+        "security": [],
+        "tags": ["Comment"],
+        "summary": "For count of likes on comment.",
+        "description": "This api is used to get total number of likes on a comment.",
+        "parameters": [
+          {
+            "name": "userid",
+            "description": "Insert Id of the User",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "postid",
+            "description": "Insert PostId",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "commentid",
+            "description": "Insert commentid",
+            "required": "true",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfull."           
+          },
+          "401": {
+            "description": "Unauthorized."
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "schema": {
+      "userRegister": {
+        "required": ["username", "email", "password"],
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string",
+            "example": "Shoaib Khan"
+          },
+          "role": {
+            "type": "string",
+            "example": "admin"
+          },
+          "email": {
+            "type": "string",
+            "example": "abc@gmail.com"
+          },
+          "password": {
+            "type": "string",
+            "example": "1234xyz"
+          }
+        }
+      },
+      "users": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string",
+            "example": "Shoaib Khan"
+          },
+          "role": {
+            "type": "string",
+            "example": "admin"
+          },
+          "email": {
+            "type": "string",
+            "example": "abc@gmail.com"
+          }
+        }
+      },
+      "userUpdate": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string",
+            "example": "Shoaib Khan"
+          },
+          "email": {
+            "type": "string",
+            "example": "abc@gmail.com"
+          }
+        }
+      },
+      "userLogin": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "abc@gmail.com"
+          },
+          "password":{
+            "type":"string",
+            "example":"1234xyz"
+          }
+        }
+      },
+      "post":{
+        "type":"object",
+        "properties": {
+          "userPost": {
+            "type":"string",
+            "required":"true",
+            "example": "hello this is demo post"
+          }
+        }
+      },
+      "comment":{
+        "type":"object",
+        "properties": {
+          "comment": {
+            "type":"string",
+            "required":"true",
+            "example": "comment here"
+          }
+        }
+      }
+    }
+  }
+}
