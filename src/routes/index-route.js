@@ -3,6 +3,7 @@ const userRouter = require('./user-route');
 const postRouter = require('./post-route');
 const commentRouter = require('./comment-route');
 
+
 const indexRouter = Router({mergeParams:true});
 
 indexRouter.use('/users', userRouter)

@@ -1,7 +1,5 @@
 const { Joi } = require("express-validation");
-
-const userid = Joi.string().required();
-
+Joi.objectId = require('joi-objectid')(Joi)
 
 exports.registerValidate = {
   body: Joi.object({
@@ -34,18 +32,18 @@ exports.updateUserValidate = {
     }),
   }),
   params: Joi.object({
-    userid: userid,
+    userid: Joi.objectId()
   }),
 };
 
 exports.getUserByIdValidate = {
   params: Joi.object({
-    userid: userid
+    userid: Joi.objectId()
   }),
 };
 
 exports.deleteUserValidate = {
   params: Joi.object({
-    userid: userid,
+    userid: Joi.objectId(),
   }),
 };
