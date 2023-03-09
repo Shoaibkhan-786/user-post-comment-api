@@ -1,14 +1,16 @@
 const { Router } = require("express");
-const passport = require("passport");
 const { validate } = require("express-validation");
+const passport = require("passport");
+
 
 const { registerUser, getUserById, udpdateUser,  deleteUser, getAllUser,  loginUser,} = require("../controllers/user-controller");
 
 const {  registerValidate, loginValidate,  updateUserValidate,  getUserByIdValidate,  deleteUserValidate,} = require("../validations/user-validation");
 
+const userRouter = Router({ mergeParams: true });
 require("../middlewares/user-auth");
 
-const userRouter = Router({ mergeParams: true });
+
 
 const authenticate = passport.authenticate("auth", { session: false });
 const authenticateLogin = passport.authenticate("login", { session: false });

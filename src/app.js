@@ -13,8 +13,9 @@ const port = parseInt(process.env.PORT || 8000);
 // app.use(passport.initialize());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use("/api-swagger", swaggerUI.serve, swaggerUI.setup(swaggerSpec));
 app.use(indexRouter);
+app.use("/api-swagger", swaggerUI.serve, swaggerUI.setup(swaggerSpec));
+
 
 app.use('/test', (req, res) => {
   res.send('-------------------')

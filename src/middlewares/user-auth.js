@@ -6,6 +6,29 @@ const ExtractJwt = require("passport-jwt").ExtractJwt;
 const userModel = require('../models/user-model');
 const createError = require('http-errors');
 
+passport.use('login', new localStrategy(
+    {
+        usernameField: "email",
+        passwordField: "password",
+    },
+    async ( email, password, done) => {
+        try {
+            const user = await userModel.findOne({email});
+            if(!user) throw createError.Unauthorized("please enter correct email or register first.")
+
+            const validatePassword = await user.checkPassword(password);
+            if(!validatePassword) throw createError.Unauthorized("please enter correct password.")
+                
+            const payload = {_id: user._id, role: user.role}
+            const token = jwt.sign(payload, process.env.secretKey)
+        
+            return done(null, token);
+        } catch (error) {
+            done(error, false) 
+        }
+    }
+))
+
 passport.use('auth', new jwtStrategy(
     {
         secretOrKey: process.env.secretKey,
@@ -19,31 +42,6 @@ passport.use('auth', new jwtStrategy(
             return done(null, JwtPayload);
         } catch (error) {
             done(error)
-        }
-    }
-))
-
-
-passport.use('login', new localStrategy(
-    {
-        usernameField: "email",
-        passwordField: "password",
-    },
-    async ( email, password, done) => {
-        try {
-            const user = await userModel.findOne({email});
-            console.log(user)
-            // if(!user) throw createError.Unauthorized("please enter correct email or register first.", 401)
-
-            const validatePassword = await user.checkPassword(password);
-            // if(!validatePassword) throw createError.Unauthorized("please enter correct password.", 401)
-                
-            const payload = {_id: user._id, role: user.role}
-            const token = jwt.sign(payload, process.env.secretKey)
-        
-            return done(null, token);
-        } catch (error) {
-            done(error, false) 
         }
     }
 ))

@@ -15,6 +15,7 @@ exports.registerUser = async (req,res,next) => {
 exports.loginUser = async (req,res,next) => {
     try {
         res.json({message: "Logged in Successfully", token: req.user});
+        console.log(arrived)
     } catch (error) {
         next(error)
     }
